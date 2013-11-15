@@ -10,7 +10,9 @@
             tool that will send an email out to remind you of an event in the
             lunar calendar. It is useful for getting reminders for Asian parents
             or grandparents that celebrate their birthday in the lunar calendar
-            or to remind you of any other lunar calendar events.</p>
+            or to remind you of any other lunar calendar events. You can also
+            use this to find out your lunar birthday by entering in your western
+            birthday with the year.</p>
             <p>I could not find this functionality in google calendar so I wrote
             this application very quickly to fill in this gap. This application
             will work until 2050 and then it will stop working because of a
@@ -52,21 +54,42 @@
 <table border="1">
     <tr>
         <th>Reminder</th>
-        <th>Lunar Date</th>
-        <th>Next Scheduled Reminder</th>
+        <th>Lunar Date (yy/mm/dd)</th>
+        <th>Western Date (mm/dd/yy)</th>
+        <th>Next Scheduled Reminder (mm/dd/yy)</th>
         <th>Options</th>
     </tr>
 {% for job in jobs %}
     <tr>
         <td>{{ job.note }}</td>
-        <td>{{ job.date.strftime('%Y-%m-%d') }}</td>
-        <td>{{ job.date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ job.getFormattedLunarDate() }}</td>
+        <td>{{ job.date.strftime('%m/%d/%Y') }}</td>
+        <td>{{ job.getNextRun() }}</td>
         <td><a href="/delete?id={{ job.key.urlsafe() }}">Delete</a></td>
     </tr>
 {% endfor %}
 </table>
 
 <hr>
+{% if error == 'success_deleted' %}
+<div style="color: green;font-weight:bold">
+    Successfully Deleted Reminder
+</div>
+{% elif error == 'invalid_date' %}
+<div style="color: red;font-weight:bold">
+    Invalid Date Entry - Could Not Add Job!
+</div>
+{% elif error == 'exceed_user_quota' %}
+<div style="color: red;font-weight:bold">
+    Your reminder has not been saved. You have exceeded the number of reminders allotted to each user on the server.
+    Please delete some reminders if you want to add any more.
+</div>
+{% elif error == 'exceed_daily_quota' %}
+<div style="color: red;font-weight:bold">
+    Your reminder has not been saved. There have been too many reminders added
+    for this day. I apologize, but we cannot add any more because of our very low email quota.
+</div>
+{% endif %}
     <form action="/addJob" method="post">
       <div><label for="content">Reminder: </label><input name="content"
       type="text" /></div>
@@ -130,9 +153,16 @@
       <option value="31">31</option>
       </select>
       </div>
+      <div><label for="date_type">Date Input Type: </label><select
+              name="date_type">
+              <option value="solar">Western</option>
+              <option value="lunar">Asian/Lunar</option>
+          </select>
       <div><input type="submit" value="Add Email Reminder"></div>
     </form>
 
+    <hr>
+     <a href="{{ logout_url|safe }}">{{ logout_url_linktext }}</a>
 
     </body>
 </html>
