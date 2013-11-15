@@ -4,3 +4,5 @@
 * Add message saying when next reminder will be
 * Add cronjob to send email out
 * Add email sending ability
+* Add README.md
+* Add stylesheet <low priority>
