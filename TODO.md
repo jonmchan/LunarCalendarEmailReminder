@@ -4,5 +4,6 @@
 ~~* Add message saying when next reminder will be~~ Completed 11/15/2013
 ~~* Add cronjob to send email out~~
 ~~* Add email sending ability~~
+* Make cronjob to check email a bit more efficient, right now does full table scan... probably useful to store the date in lunar time instead of western time
 * Add README.md
 * Add stylesheet <low priority>
