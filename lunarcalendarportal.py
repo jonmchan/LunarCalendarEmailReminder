@@ -4,13 +4,15 @@ import cgi
 import urllib
 import webapp2
 import sys
+import jinja2
+import os
 from lunardate import LunarDate
 from messagingjob import MessagingJob
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
 MAIN_PAGE_FOOTER_TEMPLATE = """\
-    <form action="/sign?%s" method="post">
+    <form action="/sign" method="post">
       <div><label for="content">Reminder: </label><input name="content"
       type="text" /></div>
       <div>
@@ -83,12 +85,14 @@ MAIN_PAGE_FOOTER_TEMPLATE = """\
 </html>
 """
 
+
+
 DEFAULT_MESSAGING_JOB_NAME = 'default_job_queue'
 
-
-# We set a parent key on the 'Greetings' to ensure that they are all in the same
-# entity group. Queries across the single entity group will be consistent.
-# However, the write rate should be limited to ~1/second.
+JINJA_ENVIRONMENT = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)+"/templates"),
+        extensions=['jinja2.ext.autoescape'],
+        autoescape=True)
 
 def messagingJob_key(messaging_name=DEFAULT_MESSAGING_JOB_NAME):
     return ndb.Key('LunarCalendarReminderMessagingQueue', messaging_name)
@@ -102,7 +106,7 @@ class MainPage(webapp2.RequestHandler):
         else:
             self.redirect(users.create_login_url(self.request.uri))
 
-        self.response.write('<html><body>')
+        #self.response.write('<html><body>')
 
         messaging_jobs_query = MessagingJob.query(
             ancestor=messagingJob_key(DEFAULT_MESSAGING_JOB_NAME))
@@ -110,20 +114,29 @@ class MainPage(webapp2.RequestHandler):
             MessagingJob.owner == user).order(-MessagingJob.created_date)
         messaging_jobs = messaging_jobs_query.fetch(10)
 
-        for job in messaging_jobs:
-            self.response.write(
-                    '<b>%s</b> wrote: <a href="/delete?id=%s">Delete</a>' %
-                    (job.date,job.key.urlsafe()))
-            self.response.write('<blockquote>%s</blockquote>' %
-                                cgi.escape(job.note))
+        #for job in messaging_jobs:
+        #    self.response.write(
+        #            '<b>%s</b> wrote: <a href="/delete?id=%s">Delete</a>' %
+        #            (job.date,job.key.urlsafe()))
+        #    self.response.write('<blockquote>%s</blockquote>' %
+        #                        cgi.escape(job.note))
             
-        url = users.create_logout_url(self.request.uri)
-        url_linktext = 'Logout'
+        logout_url = users.create_logout_url(self.request.uri)
+        logout_url_linktext = 'Logout'
 
         # Write the submission form and the footer of the page
-        sign_query_params = urllib.urlencode({'guestbook_name': DEFAULT_MESSAGING_JOB_NAME })
-        self.response.write(MAIN_PAGE_FOOTER_TEMPLATE %
-                            (sign_query_params, url, url_linktext))
+        #sign_query_params = urllib.urlencode({'guestbook_name': DEFAULT_MESSAGING_JOB_NAME })
+        #self.response.write(MAIN_PAGE_FOOTER_TEMPLATE %
+        #                    (sign_query_params, url, url_linktext))
+
+        template_values = {
+                'jobs': messaging_jobs,
+                'logout_url': logout_url,
+                'logout_url_linktext': logout_url_linktext,
+                }
+
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render(template_values))
 
 
 class DeleteJob(webapp2.RequestHandler):
@@ -141,7 +154,7 @@ class DeleteJob(webapp2.RequestHandler):
 
 
 
-class Guestbook(webapp2.RequestHandler):
+class AddJob(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         if user:
@@ -171,6 +184,6 @@ class Guestbook(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Guestbook),
+    ('/addJob', AddJob),
     ('/delete', DeleteJob),
 ], debug=True)
