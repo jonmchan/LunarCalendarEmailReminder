@@ -6,6 +6,7 @@ import webapp2
 import sys
 import jinja2
 import os
+import cronjob
 from lunardate import LunarDate
 from messagingjob import MessagingJob
 from google.appengine.api import users
@@ -15,7 +16,7 @@ from google.appengine.ext import ndb
 DEFAULT_MESSAGING_JOB_NAME = 'default_job_queue'
 
 ## prevent flooding
-MAX_ENTRIES_PER_USER=5
+MAX_ENTRIES_PER_USER=20
 
 ## Mostly set to prevent hitting Google AppEngine Email limits
 MAX_ENTRIES_PER_DAY=8
@@ -126,4 +127,5 @@ application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/addJob', AddJob),
     ('/delete', DeleteJob),
+    ('/cronjob/daily', cronjob.DailyEmail),
 ], debug=True)

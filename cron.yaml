@@ -1,0 +1,5 @@
+cron:
+- description: Daily Emails
+  url: /cronjob/daily
+  schedule: every 2 minutes
+#  schedule: every day 00:00
