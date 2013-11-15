@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+    <head>
+        <title>Lunar Calendar Email Reminder</title>
+    </head>
+    <body>
+        <h1>Lunar Calendar Email Reminder</h1>
+        <div><p>This application is a simple set and forget email reminder
+            tool that will send an email out to remind you of an event in the
+            lunar calendar. It is useful for getting reminders for Asian parents
+            or grandparents that celebrate their birthday in the lunar calendar
+            or to remind you of any other lunar calendar events.</p>
+            <p>I could not find this functionality in google calendar so I wrote
+            this application very quickly to fill in this gap. This application
+            will work until 2050 and then it will stop working because of a
+            limitation in the lunar conversion library I am using. Hopefully I
+            will update it before then!</p>
+            <p>To use this app, simply fill out the form below and you will
+            receive a reminder every year on the lunar month and day that you
+            have set.</p>
+            <p><b>A Note On Lunar Leap Month</b> I'm no expert at this, but I
+            found this:
+            </p>
+            <blockquote>
+                <p><b>Born on Leap Month</b></p>
+
+                <p>Based on the usual chinese fortune-telling practice, people
+                who born on the first 15th days of a leap month should be
+                counted as born on the previous month, and people who born on or
+                after the 16th date of a leap month should be counted as born on
+                the month followed.</p>
+
+                <p>So, if you were born on 1st June, 1982, your birth month
+                should be counted as the 4th lunar month of 1982. On the other
+                hand, if you were born on 15th June, 1982, your birth month
+                should be on the 5th lunar month of 1982.</p>
+
+
+                <p><b>Conceive on Leap Month </b></p>
+
+                <p>By the same token, if you conceive on the first 15 days of a
+                leap month, then the month of conception should be counted as
+                the previous month, and the rest of the leap month should be
+                counted as the next month. Having said that, there are some
+                chinese fortune tellers argue that the entire leap month should
+                be counted as the previous month. The conclusion is that If you
+                are serious about gender selection, don't choose to conceive on
+                leap months.</p>
+</blockquote>
+<hr>
+<table border="1">
+    <tr>
+        <th>Reminder</th>
+        <th>Lunar Date</th>
+        <th>Next Scheduled Reminder</th>
+        <th>Options</th>
+    </tr>
+{% for job in jobs %}
+    <tr>
+        <td>{{ job.note }}</td>
+        <td>{{ job.date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ job.date.strftime('%Y-%m-%d') }}</td>
+        <td><a href="/delete?id={{ job.key.urlsafe() }}">Delete</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+<hr>
+    <form action="/addJob" method="post">
+      <div><label for="content">Reminder: </label><input name="content"
+      type="text" /></div>
+      <div>
+      <label for="year">Year: </label>
+      <select name="year">
+      {% for year in range(1900,2050) %}
+      <option value="{{ year }}">{{ year }}</option>
+      {% endfor %}
+      </select>
+      
+      <label for="month">Month: </label>
+      <select name="month">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13 (lunar leap month)</option>
+      </select>
+
+      <label for="day">Day: </label>
+      <select name="day">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+      <option value="19">19</option>
+      <option value="20">20</option>
+      <option value="21">21</option>
+      <option value="22">22</option>
+      <option value="23">23</option>
+      <option value="24">24</option>
+      <option value="25">25</option>
+      <option value="26">26</option>
+      <option value="27">27</option>
+      <option value="28">28</option>
+      <option value="29">29</option>
+      <option value="30">30</option>
+      <option value="31">31</option>
+      </select>
+      </div>
+      <div><input type="submit" value="Add Email Reminder"></div>
+    </form>
+
+
+    </body>
+</html>
+{% endautoescape %}
