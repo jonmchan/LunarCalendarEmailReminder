@@ -5,6 +5,6 @@
 ~~* Add cronjob to send email out~~
 ~~* Add email sending ability~~
 * Make cronjob to check email a bit more efficient, right now does full table scan... probably useful to store the date in lunar time instead of western time
-* Add README.md
-* Separate Index / Intro Page and Reminder application page (in case of failure to load application page)
+~~* Add README.md~~
+~~* Separate Index / Intro Page and Reminder application page (in case of failure to load application page)~~
 * Add stylesheet <low priority>

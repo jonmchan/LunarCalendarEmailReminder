@@ -7,7 +7,7 @@ I could not find this functionality in google calendar so I wrote this applicati
 
 ## Production Url:
 
-[http://lunar-calendar-email-reminder.appspot.com/](http://lunar-calendar-email-reminder.appspot.com/)
+[http://lunar-date-reminder.appspot.com/](http://lunar-date-reminder.appspot.com/)
 
 ## Known Issues:
 
