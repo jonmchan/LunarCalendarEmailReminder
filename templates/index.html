@@ -3,6 +3,7 @@
 <html>
     <head>
         <title>Lunar Calendar Email Reminder</title>
+        <meta charset="utf-8">
     </head>
     <body>
         <h1>Lunar Calendar Email Reminder</h1>
@@ -66,6 +67,7 @@ server, feel free to download the code at <a
 place one up on <a
     href="https://developers.google.com/appengine/">AppEngine</a> for yourself. It's pretty
 simple if you are a developer.</p>
+</div>
 
 {% if jobs != '' %}
 <hr>
@@ -189,7 +191,7 @@ try using a Google Chrome incognito window to log in with only one account.
 There is a bug with Google AppEngine and multiple user accounts. Sorry!</p>
   {% endif %}
     <hr>
-     <a href="{{ logout_url|safe }}">{{ logout_url_linktext }}</a>
+     <a href="{{ logout_url }}">{{ logout_url_linktext }}</a>
 
     </body>
 </html>
