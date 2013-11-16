@@ -36,7 +36,20 @@ class MainPage(webapp2.RequestHandler):
         if user:
             pass
         else:
-            self.redirect(users.create_login_url(self.request.uri))
+            url = users.create_login_url(self.request.uri)
+            url_linktext = 'Login'
+            
+            template_values = {
+                    'jobs': '',
+                    'logout_url': url,
+                    'logout_url_linktext': url_linktext,
+                    'error': self.request.get('msg',''),
+                    }
+
+            template = JINJA_ENVIRONMENT.get_template('index.html')
+            self.response.write(template.render(template_values))
+            #self.redirect(users.create_login_url(self.request.uri))
+            return
 
         messaging_jobs_query = MessagingJob.query(
             ancestor=messagingJob_key(DEFAULT_MESSAGING_JOB_NAME))

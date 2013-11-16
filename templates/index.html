@@ -18,10 +18,19 @@
             will work until 2050 and then it will stop working because of a
             limitation in the lunar conversion library I am using. Hopefully I
             will update it before then!</p>
-            <p>To use this app, simply fill out the form below and you will
-            receive a reminder every year on the lunar month and day that you
-            have set.</p>
-            <p><b>A Note On Lunar Leap Month</b> I'm no expert at this, but I
+            <h2>Usage</h2>
+            <p>To use this app, click the log in button and fill out the form to
+            indicate what date you would like to receive a reminder for. You can
+            enter a Western calendar date (be sure to specify correct year) and
+            it will track the Asian/lunar calendar date or you can just enter the
+            Asian/lunar calendar date directly. Once you click submit, you will
+            see your reminder show up in the table above the form and you can
+            see when the next reminder will be sent. On the appropriate date,
+            you will receive an email with the reminder that you have set.
+            When you no longer want to receive the reminder, simply click delete
+            and the reminder will no longer be sent every year.
+            </p>
+            <h3>A Note On Lunar Leap Month</h3><p> I'm no expert at this, but I
             found this:
             </p>
             <blockquote>
@@ -57,6 +66,7 @@ server, feel free to download the code at <a
 place one up on <a
     href="https://developers.google.com/appengine/">AppEngine</a> for yourself. It's pretty
 simple if you are a developer.
+{% if jobs != '' %}
 <hr>
 <table border="1">
     <tr>
@@ -166,8 +176,17 @@ simple if you are a developer.
               <option value="lunar">Asian/Lunar</option>
           </select>
       <div><input type="submit" value="Add Email Reminder"></div>
-    </form>
-
+  </form>
+  {% else %}
+  <hr>
+<h2>
+Please log in to use the Lunar Calendar Email Reminder.
+</h2>
+<p><b>NOTE:</b> If you get a HTTP 500 "Error: Server Error" when logging in and you are using
+multiple google account login, please try logging out of all your accounts or
+try using a Google Chrome incognito window to log in with only one account.
+There is a bug with Google AppEngine and multiple user accounts. Sorry!</p>
+  {% endif %}
     <hr>
      <a href="{{ logout_url|safe }}">{{ logout_url_linktext }}</a>
 
