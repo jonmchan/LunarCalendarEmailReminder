@@ -18,8 +18,10 @@ def UpdateSchema(cursor=None,num_updated=0):
             lunarDate=p.getLunarDate()
             p.lunar_month=lunarDate.month
             p.lunar_day=lunarDate.day
+            logging.info(str(p.getLunarDate()) + p.note + " migrated")
         else:
-            logging.debug(p.note + " does not have an empty lunar_month/lunar_date")
+            logging.info(str(p.getLunarDate()) + p.note + " does not have an empty lunar_month/lunar_date")
+            continue
 
         to_put.append(p)
 
