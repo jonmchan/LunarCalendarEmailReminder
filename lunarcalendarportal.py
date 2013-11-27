@@ -113,6 +113,9 @@ class AddJob(webapp2.RequestHandler):
             try:
                 msg_job.date = date(int(self.request.get('year')),
                         int(self.request.get('month')), int(self.request.get('day')))
+                LunarDate.fromSolarDate(msg_job.date.year,
+                        msg_job.date.month,
+                        msg_job.date.day).toSolarDate()
             except ValueError:
                 self.redirect('/?msg=invalid_date')
                 return
