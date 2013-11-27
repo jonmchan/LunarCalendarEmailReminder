@@ -67,6 +67,9 @@ server, feel free to download the code at <a
 place one up on <a
     href="https://developers.google.com/appengine/">AppEngine</a> for yourself. It's pretty
 simple if you are a developer.</p>
+
+<p>If you have any problems with this application or suggestions, shoot me an
+email at <a href="mailto:jc@jmccc.com">jc@jmccc.com</a>.
 </div>
 
 {% if jobs != '' %}
@@ -97,7 +100,8 @@ simple if you are a developer.</p>
 </div>
 {% elif error == 'invalid_date' %}
 <div style="color: red;font-weight:bold">
-    Invalid Date Entry - Could Not Add Job!
+    Invalid Date Entry - Could Not Add Job. Please verify that your day/month is
+    valid and that the date is after 1900 and before 2050.
 </div>
 {% elif error == 'exceed_user_quota' %}
 <div style="color: red;font-weight:bold">
