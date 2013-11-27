@@ -1,12 +1,19 @@
 application: lunar-date-reminder
-version: 1
+version: 2
 runtime: python27
 api_version: 1
 threadsafe: true
 
+builtins:
+- deferred: on
+
 handlers:
 - url: /assets
   static_dir: assets
+- url: /update_schema
+  script: migration_handler.app
+  login: admin
+  secure: always
 - url: /.*
   script: lunarcalendarportal.application
 

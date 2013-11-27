@@ -8,6 +8,9 @@ class MessagingJob(ndb.Model):
     date = ndb.DateProperty()
     note = ndb.StringProperty(indexed=False)
     created_date = ndb.DateProperty(auto_now_add=True)
+    lunar_month = ndb.IntegerProperty(indexed=True)
+    lunar_day = ndb.IntegerProperty(indexed=True)
+
 
     def getLunarDate(self):
         ld = LunarDate.fromSolarDate(self.date.year, self.date.month,self.date.day)
