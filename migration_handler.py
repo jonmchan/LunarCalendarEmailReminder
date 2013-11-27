@@ -6,7 +6,7 @@ from google.appengine.ext import deferred
 
 class UpdateHandler(webapp2.RequestHandler):
     def get(self):
-        logging.info("we made it here")
+        logging.info("Schema migration successfully initiated.")
         deferred.defer(migrations.UpdateSchema)
         self.response.out.write('Schema migration successfully initiated.')
 
