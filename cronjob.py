@@ -24,12 +24,11 @@ Lunar Calendar Reminder
 class DailyEmail(webapp2.RequestHandler):
     def get(self):
         today_ld=LunarDate.today()
-        q1=MessagingJob.query()
+        q1=MessagingJob.query(MessagingJob.lunar_month == today_ld.month,
+                MessagingJob.lunar_day == today_ld.day)
         for job in q1.iter():
-            original_ld=LunarDate.fromSolarDate(job.date.year, job.date.month, job.date.day)
-            if original_ld.month == today_ld.month and original_ld.day == today_ld.day:
-                mail.send_mail(sender=SENDER,
-                        to=job.owner.email(),
-                        subject="Lunar Calendar Reminder - "+job.note,
-                        body= EMAIL_BODY % (job.owner.nickname(),
-                            job.note, job.getNextRun()))
+            mail.send_mail(sender=SENDER,
+                    to=job.owner.email(),
+                    subject="Lunar Calendar Reminder - "+job.note,
+                    body= EMAIL_BODY % (job.owner.nickname(),
+                        job.note, job.getNextRun()))

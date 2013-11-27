@@ -55,7 +55,7 @@ class MainPage(webapp2.RequestHandler):
             ancestor=messagingJob_key(DEFAULT_MESSAGING_JOB_NAME))
         messaging_jobs_query = messaging_jobs_query.filter(
             MessagingJob.owner == user).order(-MessagingJob.created_date)
-        messaging_jobs = messaging_jobs_query.fetch(10)
+        messaging_jobs = messaging_jobs_query.fetch(MAX_ENTRIES_PER_USER)
 
         logout_url = users.create_logout_url(self.request.uri)
         logout_url_linktext = 'Logout'
@@ -117,6 +117,10 @@ class AddJob(webapp2.RequestHandler):
                 self.redirect('/?msg=invalid_date')
                 return
 
+        lunarDate=LunarDate.fromSolarDate(msg_job.date.year,msg_job.date.month,msg_job.date.day)
+        msg_job.lunar_month = lunarDate.month
+        msg_job.lunar_day = lunarDate.day
+
         base_messaging_jobs_query = MessagingJob.query(
             ancestor=messagingJob_key(DEFAULT_MESSAGING_JOB_NAME))
         messaging_jobs_query_by_user = base_messaging_jobs_query.filter(
@@ -126,7 +130,8 @@ class AddJob(webapp2.RequestHandler):
             return
 
         messaging_jobs_query_by_date = base_messaging_jobs_query.filter(
-                MessagingJob.date == msg_job.date)
+                MessagingJob.lunar_month == msg_job.lunar_month).filter(
+                MessagingJob.lunar_day == msg_job.lunar_day)
         if messaging_jobs_query_by_date.count() >= MAX_ENTRIES_PER_DAY:
             self.redirect('/?msg=exceed_daily_quota')
             return
