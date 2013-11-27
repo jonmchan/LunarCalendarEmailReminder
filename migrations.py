@@ -13,7 +13,7 @@ def UpdateSchema(cursor=None,num_updated=0):
 
     to_put = []
     for p in results:
-        # migratino #1 - adding lunar_month & lunar_day index
+        # migration #1 - AppVersion 2 - adding lunar_month & lunar_day index
         if p.lunar_month is None and p.lunar_day is None:
             lunarDate=p.getLunarDate()
             p.lunar_month=lunarDate.month
